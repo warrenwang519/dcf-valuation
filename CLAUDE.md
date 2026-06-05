@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 DCF Valuation App — a professional DCF (Discounted Cash Flow) valuation tool for iOS. Targets individual investors in US, HK, and A-share markets. Users input financial parameters and get intrinsic value per share in seconds.
 
+## Git Workflow
+
+- **Commit and push to GitHub regularly** — after every meaningful change, commit with a clean message and push to `origin/main` so we never lose work in progress.
+- Commit messages should be concise, imperative mood, and describe the "why" not just the "what".
+- Always push after committing: `git push origin main`.
+- Never leave uncommitted changes sitting in the working tree when moving on to a new task.
+
 ## Tech Stack
 
 - **Platform**: iOS 18+ (Deployment Target), built with Xcode 26, iOS 26 SDK
