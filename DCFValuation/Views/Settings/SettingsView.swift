@@ -1,6 +1,14 @@
 import SwiftUI
 import SwiftData
 
+private extension Double {
+    var cleanString: String {
+        truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", self)
+            : String(self)
+    }
+}
+
 struct SettingsView: View {
     @Environment(AuthViewModel.self) private var authViewModel
     @Environment(SettingsService.self) private var settingsService
@@ -25,14 +33,30 @@ struct SettingsView: View {
                     HStack {
                         Text("Default WACC")
                         Spacer()
-                        Text("\(settings.settings.defaultWACC, specifier: "%.1f")%")
+                        TextField("e.g. 10", text: Binding(
+                            get: { settings.settings.defaultWACC == 0 ? "" : settings.settings.defaultWACC.cleanString },
+                            set: { settings.settings.defaultWACC = Double($0) ?? 0 }
+                        ))
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 100)
+                        Text("%")
                             .foregroundStyle(.secondary)
                     }
 
                     HStack {
                         Text("Default Terminal Growth")
                         Spacer()
-                        Text("\(settings.settings.defaultTerminalGrowthRate, specifier: "%.1f")%")
+                        TextField("e.g. 2.5", text: Binding(
+                            get: { settings.settings.defaultTerminalGrowthRate == 0 ? "" : settings.settings.defaultTerminalGrowthRate.cleanString },
+                            set: { settings.settings.defaultTerminalGrowthRate = Double($0) ?? 0 }
+                        ))
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 100)
+                        Text("%")
                             .foregroundStyle(.secondary)
                     }
                 }
