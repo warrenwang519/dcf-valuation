@@ -7,36 +7,46 @@ struct InputFieldRow: View {
     var keyboardType: UIKeyboardType = .decimalPad
     var numericOnly: Bool = true
     var suffix: String?
+    var errorMessage: String?
 
     var body: some View {
-        HStack {
-            Text(title)
-                .frame(width: 120, alignment: .leading)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(title)
+                    .frame(width: 120, alignment: .leading)
 
-            TextField(placeholder, text: $text)
-                .keyboardType(keyboardType)
-                .multilineTextAlignment(.trailing)
-                .textFieldStyle(.roundedBorder)
-                .onChange(of: text) {
-                    if numericOnly {
-                        var seenDot = false
-                        let cleaned = text.filter { char in
-                            if char == "." {
-                                if seenDot { return false }
-                                seenDot = true
+                TextField(placeholder, text: $text)
+                    .keyboardType(keyboardType)
+                    .multilineTextAlignment(.trailing)
+                    .textFieldStyle(.roundedBorder)
+                    .onChange(of: text) {
+                        if numericOnly {
+                            var seenDot = false
+                            let cleaned = text.filter { char in
+                                if char == "." {
+                                    if seenDot { return false }
+                                    seenDot = true
+                                }
+                                return char.isNumber || char == "."
                             }
-                            return char.isNumber || char == "."
-                        }
-                        if cleaned != text {
-                            text = cleaned
+                            if cleaned != text {
+                                text = cleaned
+                            }
                         }
                     }
-                }
 
-            if let suffix {
-                Text(suffix)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 30)
+                if let suffix {
+                    Text(suffix)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 30)
+                }
+            }
+
+            if let errorMessage {
+                Text(errorMessage)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
     }

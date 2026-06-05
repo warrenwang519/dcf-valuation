@@ -13,21 +13,21 @@ enum ValidationError: Equatable, Sendable, Error {
     var localizedDescription: String {
         switch self {
         case .fcfMustBePositive:
-            "Free cash flow must be greater than 0"
+            "FCF is required. Enter a positive free cash flow value."
         case .growthRateOutOfRange:
-            "Growth rate must be between -50% and 100%"
+            "Revenue growth rate must be between -50% and 100%."
         case .forecastYearsOutOfRange:
-            "Forecast years must be between 1 and 30"
+            "Projection period must be between 1 and 30 years."
         case .waccOutOfRange:
-            "WACC must be between 0% and 50%"
+            "WACC must be between 0% and 50% (exclusive)."
         case .terminalGrowthRateInvalid:
-            "Terminal growth rate must be >= 0% and less than WACC"
+            "Terminal growth rate must be non-negative and strictly less than WACC."
         case .sharesMustBePositive:
-            "Shares outstanding must be greater than 0"
+            "Shares outstanding is required. Enter a positive share count."
         case .tickerTooLong:
-            "Ticker must be 10 characters or less"
+            "Ticker symbol must not exceed 10 characters."
         case .waccTooCloseToTerminalGrowth:
-            "WACC must be significantly greater than terminal growth rate (difference > 0.1%)"
+            "Spread between WACC and terminal growth rate must exceed 0.1%."
         }
     }
 }
