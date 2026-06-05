@@ -143,6 +143,7 @@ struct DCFInputView: View {
                             title: label,
                             placeholder: "e.g. 8",
                             text: stageGrowthBinding(at: index),
+                            numericOnly: false,
                             suffix: "%",
                             errorMessage: (index == 0) ? growthRateError : nil
                         )
