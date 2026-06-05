@@ -44,9 +44,7 @@ struct DCFValuationApp: App {
             )
         } catch {
             // Fallback: delete old store and retry (dev convenience)
-            if let url = modelConfiguration.url {
-                try? FileManager.default.removeItem(at: url)
-            }
+            try? FileManager.default.removeItem(at: modelConfiguration.url)
             do {
                 return try ModelContainer(
                     for: schema,
