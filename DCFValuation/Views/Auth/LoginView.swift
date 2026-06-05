@@ -17,10 +17,10 @@ struct LoginView: View {
                     .font(.largeTitle.bold())
 
                 Text("Professional DCF valuation tool for investors.\nCalculate intrinsic value in seconds.")
-                    .font(.body)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
+                    .padding(.horizontal, 24)
             }
 
             Spacer()
