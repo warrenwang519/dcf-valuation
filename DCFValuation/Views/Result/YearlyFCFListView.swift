@@ -6,6 +6,28 @@ struct YearlyFCFListView: View {
 
     var body: some View {
         DisclosureGroup("Yearly FCF Detail") {
+            // Column headers
+            HStack {
+                Text("Year")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 60, alignment: .leading)
+                Spacer()
+                Text("FCF")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 100, alignment: .trailing)
+                Text("Disc. Factor")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 80, alignment: .trailing)
+                Text("PV")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 100, alignment: .trailing)
+            }
+            .padding(.vertical, 4)
+
             ForEach(yearlyFCFs) { item in
                 HStack {
                     Text("Year \(item.year)")
