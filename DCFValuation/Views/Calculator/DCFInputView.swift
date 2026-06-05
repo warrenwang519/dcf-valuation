@@ -24,13 +24,15 @@ struct DCFInputView: View {
                     title: "Ticker",
                     placeholder: "e.g. AAPL",
                     text: $viewModel.input.ticker,
-                    keyboardType: .default
+                    keyboardType: .default,
+                    numericOnly: false
                 )
                 InputFieldRow(
                     title: "Company",
                     placeholder: "Apple Inc.",
                     text: $viewModel.input.companyName,
-                    keyboardType: .default
+                    keyboardType: .default,
+                    numericOnly: false
                 )
             }
 

@@ -5,6 +5,7 @@ struct InputFieldRow: View {
     let placeholder: String
     @Binding var text: String
     var keyboardType: UIKeyboardType = .decimalPad
+    var numericOnly: Bool = true
     var suffix: String?
 
     var body: some View {
@@ -16,6 +17,19 @@ struct InputFieldRow: View {
                 .keyboardType(keyboardType)
                 .multilineTextAlignment(.trailing)
                 .textFieldStyle(.roundedBorder)
+                .onChange(of: text) {
+                    if numericOnly {
+                        let filtered = text.filter { $0.isNumber || $0 == "." }
+                        if filtered != text {
+                            text = filtered
+                        }
+                        // Allow only one decimal point
+                        let parts = text.split(separator: ".", maxSplits: 2)
+                        if parts.count > 2 {
+                            text = parts[0] + "." + parts[1]
+                        }
+                    }
+                }
 
             if let suffix {
                 Text(suffix)
