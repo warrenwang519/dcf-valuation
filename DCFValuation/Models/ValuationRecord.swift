@@ -1,6 +1,28 @@
 import Foundation
 import SwiftData
 
+/// V1 schema — needed for lightweight migration from old `growthRate` field.
+@Model
+final class ValuationRecordV1 {
+    var id: UUID
+    var ownerID: String
+    var ticker: String
+    var companyName: String
+    var intrinsicValue: Double
+    var enterpriseValue: Double
+    var currency: String
+    var fcf: Double
+    var growthRate: Double
+    var forecastYears: Int
+    var wacc: Double
+    var terminalGrowthRate: Double
+    var netDebt: Double
+    var sharesOutstanding: Double
+    var createdAt: Date
+    var updatedAt: Date
+    var note: String
+}
+
 @Model
 final class ValuationRecord {
     var id: UUID
