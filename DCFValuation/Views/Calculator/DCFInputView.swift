@@ -225,10 +225,8 @@ struct DCFInputView: View {
                 )
             }
         }
-        .onAppear {
-            Task { @MainActor in
-                viewModel.loadFromSettings(settingsService.settings)
-            }
+        .task {
+            viewModel.loadFromSettings(settingsService.settings)
         }
     }
 }
