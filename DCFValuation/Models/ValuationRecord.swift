@@ -2,7 +2,6 @@ import Foundation
 import SwiftData
 
 @Model
-@MainActor
 final class ValuationRecord {
     var id: UUID
     var ownerID: String
@@ -22,7 +21,7 @@ final class ValuationRecord {
     var updatedAt: Date
     var note: String
 
-    nonisolated init(
+    init(
         ownerID: String,
         ticker: String,
         companyName: String,
