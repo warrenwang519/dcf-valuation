@@ -32,22 +32,22 @@ struct YearlyFCFListView: View {
                 HStack {
                     Text("Year \(item.year)")
                         .font(.caption)
-                        .frame(width: 60, alignment: .leading)
+                        .frame(width: 60, alignment: .center)
 
                     Spacer()
 
                     Text(item.fcf.currencyFormatted(symbol: currencySymbol))
                         .font(.caption.monospacedDigit())
-                        .frame(width: 100, alignment: .trailing)
+                        .frame(width: 100, alignment: .center)
 
                     Text("×\(item.discountFactor.numberFormatted(decimals: 4))")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .frame(width: 80, alignment: .trailing)
+                        .frame(width: 80, alignment: .center)
 
                     Text(item.pv.currencyFormatted(symbol: currencySymbol))
                         .font(.caption.monospacedDigit())
-                        .frame(width: 100, alignment: .trailing)
+                        .frame(width: 100, alignment: .center)
                 }
                 .padding(.vertical, 2)
             }
