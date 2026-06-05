@@ -9,6 +9,7 @@ struct PersistenceService {
     }
 
     func save(result: DCFResult, ownerID: String) {
+        let ratesString = result.input.stageGrowthRates.map { String($0) }.joined(separator: ",")
         let record = ValuationRecord(
             ownerID: ownerID,
             ticker: result.input.ticker,
@@ -17,7 +18,8 @@ struct PersistenceService {
             enterpriseValue: result.enterpriseValue,
             currency: result.input.currency.rawValue,
             fcf: result.input.fcf,
-            growthRate: result.input.growthRate,
+            modelType: result.input.modelType.rawValue,
+            stageGrowthRates: ratesString,
             forecastYears: result.input.forecastYears,
             wacc: result.input.wacc,
             terminalGrowthRate: result.input.terminalGrowthRate,
@@ -44,11 +46,14 @@ struct PersistenceService {
     }
 
     func toDCFInput(from record: ValuationRecord) -> DCFInput {
-        DCFInput(
+        let rates = record.stageGrowthRates.split(separator: ",").compactMap { Double($0) }
+        let modelType = DCFModelType(rawValue: record.modelType) ?? .constantGrowth
+        return DCFInput(
             ticker: record.ticker,
             companyName: record.companyName,
             fcf: record.fcf,
-            growthRate: record.growthRate,
+            modelType: modelType,
+            stageGrowthRates: rates.isEmpty ? [0] : rates,
             forecastYears: record.forecastYears,
             wacc: record.wacc,
             terminalGrowthRate: record.terminalGrowthRate,

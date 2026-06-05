@@ -11,7 +11,8 @@ final class ValuationRecord {
     var enterpriseValue: Double
     var currency: String
     var fcf: Double
-    var growthRate: Double
+    var modelType: String        // DCFModelType rawValue
+    var stageGrowthRates: String // Comma-separated percentages, e.g. "8,5,3"
     var forecastYears: Int
     var wacc: Double
     var terminalGrowthRate: Double
@@ -21,6 +22,11 @@ final class ValuationRecord {
     var updatedAt: Date
     var note: String
 
+    /// Backward-compatible accessor: first stage growth rate.
+    var growthRate: Double {
+        stageGrowthRates.split(separator: ",").first.flatMap { Double($0) } ?? 0
+    }
+
     init(
         ownerID: String,
         ticker: String,
@@ -29,7 +35,8 @@ final class ValuationRecord {
         enterpriseValue: Double,
         currency: String,
         fcf: Double,
-        growthRate: Double,
+        modelType: String,
+        stageGrowthRates: String,
         forecastYears: Int,
         wacc: Double,
         terminalGrowthRate: Double,
@@ -45,7 +52,8 @@ final class ValuationRecord {
         self.enterpriseValue = enterpriseValue
         self.currency = currency
         self.fcf = fcf
-        self.growthRate = growthRate
+        self.modelType = modelType
+        self.stageGrowthRates = stageGrowthRates
         self.forecastYears = forecastYears
         self.wacc = wacc
         self.terminalGrowthRate = terminalGrowthRate
