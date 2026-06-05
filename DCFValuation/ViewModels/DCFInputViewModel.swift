@@ -24,12 +24,12 @@ final class DCFInputViewModel {
         validationErrors = errors
         guard errors.isEmpty else { return false }
 
-        switch calculator.calculate(input: input) {
-        case .success(let result):
+        let output = calculator.calculate(input: input)
+        if let result = output.result {
             self.result = result
             return true
-        case .failure(let errors):
-            validationErrors = errors
+        } else {
+            validationErrors = output.errors
             return false
         }
     }

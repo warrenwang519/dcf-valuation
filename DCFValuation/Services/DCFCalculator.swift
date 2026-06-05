@@ -3,10 +3,10 @@ import Foundation
 struct DCFCalculator: Sendable {
     private let validationService = ValidationService()
 
-    func calculate(input: DCFInput) -> Result<DCFResult, [ValidationError]> {
+    func calculate(input: DCFInput) -> (result: DCFResult?, errors: [ValidationError]) {
         let errors = validationService.validate(input)
         if !errors.isEmpty {
-            return .failure(errors)
+            return (nil, errors)
         }
 
         let waccDecimal = input.wacc / 100
@@ -70,6 +70,6 @@ struct DCFCalculator: Sendable {
             warnings: warnings
         )
 
-        return .success(result)
+        return (result, [])
     }
 }

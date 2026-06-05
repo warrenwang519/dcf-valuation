@@ -27,8 +27,8 @@ struct HistoryView: View {
                         ForEach(filteredRecords) { record in
                             NavigationLink {
                                 let input = PersistenceService(modelContext: modelContext).toDCFInput(from: record)
-                                let calculator = DCFCalculator()
-                                if case .success(let result) = calculator.calculate(input: input) {
+                                let output = DCFCalculator().calculate(input: input)
+                                if let result = output.result {
                                     ResultView(
                                         viewModel: ResultViewModel(
                                             result: result,
