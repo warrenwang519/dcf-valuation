@@ -119,6 +119,10 @@ struct SettingsView: View {
                         Text("Follow System")
                             .foregroundStyle(.secondary)
                     }
+
+                    NavigationLink("Contact Us") {
+                        ContactView()
+                    }
                 }
             }
             .navigationTitle("Settings")
