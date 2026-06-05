@@ -122,15 +122,18 @@ struct DCFInputView: View {
 
                 // Dynamic Growth Rate inputs based on model type
                 let labels = viewModel.input.modelType.stageLabels(forecastYears: viewModel.input.forecastYears)
+                let ratesCount = viewModel.input.stageGrowthRates.count
                 ForEach(Array(labels.enumerated()), id: \.offset) { index, label in
-                    InputFieldRow(
-                        title: label,
-                        placeholder: "e.g. 8",
-                        text: stageGrowthBinding(at: index),
-                        suffix: "%",
-                        errorMessage: (index == 0) ? growthRateError : nil
-                    )
-                    .onChange(of: viewModel.input.stageGrowthRates[index]) { clearErrors() }
+                    if index < ratesCount {
+                        InputFieldRow(
+                            title: label,
+                            placeholder: "e.g. 8",
+                            text: stageGrowthBinding(at: index),
+                            suffix: "%",
+                            errorMessage: (index == 0) ? growthRateError : nil
+                        )
+                        .onChange(of: viewModel.input.stageGrowthRates) { clearErrors() }
+                    }
                 }
             }
 
