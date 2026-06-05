@@ -147,20 +147,26 @@ struct DCFInputView: View {
                     }
                 }
             }
-        }
-        .navigationTitle("DCF Calculator")
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Calculate") {
+
+            Section {
+                Button {
                     if viewModel.calculate() {
                         showErrors = false
                         navigateToResult = true
                     } else {
                         showErrors = true
                     }
+                } label: {
+                    Text("Calculate")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
                 }
+                .listRowBackground(Color.blue)
+                .foregroundStyle(.white)
             }
         }
+        .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {
                 ResultView(
