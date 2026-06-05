@@ -33,9 +33,9 @@ struct DCFInputView: View {
     }
 
     /// Get the error message for a specific field, if it has a validation error.
-    private func errorMessage(for fieldID: String) -> String? {
+    private func errorMessage(for targetField: String) -> String? {
         guard showErrors else { return nil }
-        return viewModel.validationErrors.first { fieldID(for: $0) == fieldID }?.localizedDescription
+        return viewModel.validationErrors.first { fieldID(for: $0) == targetField }?.localizedDescription
     }
 
     /// Clear errors when user edits any field.
