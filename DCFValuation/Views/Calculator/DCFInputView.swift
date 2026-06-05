@@ -1,6 +1,15 @@
 import SwiftUI
 import SwiftData
 
+private extension Double {
+    /// Display as integer if no fractional part, otherwise show decimals.
+    var cleanString: String {
+        truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", self)
+            : String(self)
+    }
+}
+
 struct DCFInputView: View {
     @Environment(AuthViewModel.self) private var authViewModel
     @Environment(SettingsService.self) private var settingsService
@@ -30,7 +39,7 @@ struct DCFInputView: View {
                     title: "FCF",
                     placeholder: "Free Cash Flow (M)",
                     text: Binding(
-                        get: { viewModel.input.fcf == 0 ? "" : "\(viewModel.input.fcf)" },
+                        get: { viewModel.input.fcf == 0 ? "" : viewModel.input.fcf.cleanString },
                         set: { viewModel.input.fcf = Double($0) ?? 0 }
                     )
                 )
@@ -38,7 +47,7 @@ struct DCFInputView: View {
                     title: "Growth Rate",
                     placeholder: "e.g. 8",
                     text: Binding(
-                        get: { viewModel.input.growthRate == 0 ? "" : "\(viewModel.input.growthRate)" },
+                        get: { viewModel.input.growthRate == 0 ? "" : viewModel.input.growthRate.cleanString },
                         set: { viewModel.input.growthRate = Double($0) ?? 0 }
                     ),
                     suffix: "%"
@@ -55,7 +64,7 @@ struct DCFInputView: View {
                     title: "WACC",
                     placeholder: "e.g. 10",
                     text: Binding(
-                        get: { viewModel.input.wacc == 0 ? "" : "\(viewModel.input.wacc)" },
+                        get: { viewModel.input.wacc == 0 ? "" : viewModel.input.wacc.cleanString },
                         set: { viewModel.input.wacc = Double($0) ?? 0 }
                     ),
                     suffix: "%"
@@ -64,7 +73,7 @@ struct DCFInputView: View {
                     title: "Terminal Growth",
                     placeholder: "e.g. 2.5",
                     text: Binding(
-                        get: { viewModel.input.terminalGrowthRate == 0 ? "" : "\(viewModel.input.terminalGrowthRate)" },
+                        get: { viewModel.input.terminalGrowthRate == 0 ? "" : viewModel.input.terminalGrowthRate.cleanString },
                         set: { viewModel.input.terminalGrowthRate = Double($0) ?? 0 }
                     ),
                     suffix: "%"
@@ -76,7 +85,7 @@ struct DCFInputView: View {
                     title: "Net Debt",
                     placeholder: "Net Debt (M)",
                     text: Binding(
-                        get: { viewModel.input.netDebt == 0 ? "" : "\(viewModel.input.netDebt)" },
+                        get: { viewModel.input.netDebt == 0 ? "" : viewModel.input.netDebt.cleanString },
                         set: { viewModel.input.netDebt = Double($0) ?? 0 }
                     )
                 )
@@ -84,7 +93,7 @@ struct DCFInputView: View {
                     title: "Shares",
                     placeholder: "Shares Outstanding (M)",
                     text: Binding(
-                        get: { viewModel.input.sharesOutstanding == 0 ? "" : "\(viewModel.input.sharesOutstanding)" },
+                        get: { viewModel.input.sharesOutstanding == 0 ? "" : viewModel.input.sharesOutstanding.cleanString },
                         set: { viewModel.input.sharesOutstanding = Double($0) ?? 0 }
                     )
                 )
