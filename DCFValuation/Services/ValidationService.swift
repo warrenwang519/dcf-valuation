@@ -1,6 +1,6 @@
 import Foundation
 
-enum ValidationError: Equatable, Sendable {
+enum ValidationError: Equatable, Sendable, Error {
     case fcfMustBePositive
     case growthRateOutOfRange
     case forecastYearsOutOfRange
