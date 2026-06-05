@@ -37,11 +37,27 @@ final class DCFInputViewModel {
     func loadFromSettings(_ settings: AppSettings) {
         input.currency = settings.defaultCurrency
         input.forecastYears = settings.defaultForecastYears
+        input.modelType = settings.defaultDCFModelType
         input.wacc = settings.defaultWACC
         input.terminalGrowthRate = settings.defaultTerminalGrowthRate
+        input.resetGrowthRates()
     }
 
     func loadFromRecord(_ dcfInput: DCFInput) {
         input = dcfInput
+    }
+
+    /// Call when forecast years changes — reset model type if incompatible.
+    func onForecastYearsChanged() {
+        let available = DCFModelType.availableModels(forecastYears: input.forecastYears)
+        if !available.contains(input.modelType) {
+            input.modelType = .constantGrowth
+        }
+        input.resetGrowthRates()
+    }
+
+    /// Call when model type changes — reset growth rates.
+    func onModelTypeChanged() {
+        input.resetGrowthRates()
     }
 }

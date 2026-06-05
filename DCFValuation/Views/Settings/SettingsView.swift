@@ -46,11 +46,16 @@ struct SettingsView: View {
                 Section("Defaults") {
                     CurrencyPickerView(currency: $settings.settings.defaultCurrency)
 
-                    Stepper(
-                        "\(settings.settings.defaultForecastYears) years",
-                        value: $settings.settings.defaultForecastYears,
-                        in: 1...30
-                    )
+                    Picker("Forecast Years", selection: $settings.settings.defaultForecastYears) {
+                        Text("5 years").tag(5)
+                        Text("10 years").tag(10)
+                    }
+
+                    Picker("DCF Model", selection: $settings.settings.defaultDCFModelType) {
+                        ForEach(DCFModelType.availableModels(forecastYears: settings.settings.defaultForecastYears)) { model in
+                            Text(model.rawValue).tag(model)
+                        }
+                    }
 
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {

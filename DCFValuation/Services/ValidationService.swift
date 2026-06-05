@@ -2,8 +2,8 @@ import Foundation
 
 enum ValidationError: Equatable, Sendable, Error {
     case fcfMustBePositive
-    case growthRateOutOfRange
-    case forecastYearsOutOfRange
+    case growthRateOutOfRange(stageIndex: Int)
+    case forecastYearsInvalid
     case waccOutOfRange
     case terminalGrowthRateInvalid
     case sharesMustBePositive
@@ -14,10 +14,10 @@ enum ValidationError: Equatable, Sendable, Error {
         switch self {
         case .fcfMustBePositive:
             "FCF is required. Enter a positive free cash flow value."
-        case .growthRateOutOfRange:
-            "Revenue growth rate must be between -50% and 100%."
-        case .forecastYearsOutOfRange:
-            "Projection period must be between 1 and 30 years."
+        case .growthRateOutOfRange(let idx):
+            "Growth rate for stage \(idx + 1) must be between -50% and 100%."
+        case .forecastYearsInvalid:
+            "Projection period must be 5 or 10 years."
         case .waccOutOfRange:
             "WACC must be between 0% and 50% (exclusive)."
         case .terminalGrowthRateInvalid:
@@ -40,12 +40,15 @@ struct ValidationService: Sendable {
             errors.append(.fcfMustBePositive)
         }
 
-        if input.growthRate < -50 || input.growthRate > 100 {
-            errors.append(.growthRateOutOfRange)
+        // Validate each stage growth rate
+        for (index, rate) in input.stageGrowthRates.enumerated() {
+            if rate < -50 || rate > 100 {
+                errors.append(.growthRateOutOfRange(stageIndex: index))
+            }
         }
 
-        if input.forecastYears < 1 || input.forecastYears > 30 {
-            errors.append(.forecastYearsOutOfRange)
+        if input.forecastYears != 5 && input.forecastYears != 10 {
+            errors.append(.forecastYearsInvalid)
         }
 
         if input.wacc <= 0 || input.wacc >= 50 {

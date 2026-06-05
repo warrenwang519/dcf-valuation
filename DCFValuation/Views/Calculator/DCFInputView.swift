@@ -23,7 +23,7 @@ struct DCFInputView: View {
         switch error {
         case .fcfMustBePositive: return "fcf"
         case .growthRateOutOfRange: return "growthRate"
-        case .forecastYearsOutOfRange: return "forecastYears"
+        case .forecastYearsInvalid: return "forecastYears"
         case .waccOutOfRange: return "wacc"
         case .terminalGrowthRateInvalid: return "terminalGrowthRate"
         case .sharesMustBePositive: return "shares"
@@ -38,9 +38,29 @@ struct DCFInputView: View {
         return viewModel.validationErrors.first { fieldID(for: $0) == targetField }?.localizedDescription
     }
 
+    /// Get growth rate error (for any stage).
+    private var growthRateError: String? {
+        guard showErrors else { return nil }
+        return viewModel.validationErrors.first {
+            if case .growthRateOutOfRange = $0 { return true }
+            return false
+        }?.localizedDescription
+    }
+
     /// Clear errors when user edits any field.
     private func clearErrors() {
         if showErrors { showErrors = false }
+    }
+
+    /// Binding for a specific stage growth rate.
+    private func stageGrowthBinding(at index: Int) -> Binding<String> {
+        Binding(
+            get: {
+                let val = viewModel.input.stageGrowthRates[index]
+                return val == 0 ? "" : val.cleanString
+            },
+            set: { viewModel.input.stageGrowthRates[index] = Double($0) ?? 0 }
+        )
     }
 
     var body: some View {
@@ -65,6 +85,26 @@ struct DCFInputView: View {
             }
 
             Section("Cash Flow") {
+                // Forecast Years — moved above Growth Rate, Picker with 5/10
+                Picker("Forecast Years", selection: Binding(
+                    get: { viewModel.input.forecastYears },
+                    set: { viewModel.input.forecastYears = $0; viewModel.onForecastYearsChanged() }
+                )) {
+                    Text("5 years").tag(5)
+                    Text("10 years").tag(10)
+                }
+
+                // DCF Model Type
+                Picker("DCF Model", selection: Binding(
+                    get: { viewModel.input.modelType },
+                    set: { viewModel.input.modelType = $0; viewModel.onModelTypeChanged() }
+                )) {
+                    ForEach(DCFModelType.availableModels(forecastYears: viewModel.input.forecastYears)) { model in
+                        Text(model.rawValue).tag(model)
+                    }
+                }
+
+                // FCF
                 InputFieldRow(
                     title: "FCF",
                     placeholder: "Free Cash Flow (M)",
@@ -75,22 +115,19 @@ struct DCFInputView: View {
                     errorMessage: errorMessage(for: "fcf")
                 )
                 .onChange(of: viewModel.input.fcf) { clearErrors() }
-                InputFieldRow(
-                    title: "Growth Rate",
-                    placeholder: "e.g. 8",
-                    text: Binding(
-                        get: { viewModel.input.growthRate == 0 ? "" : viewModel.input.growthRate.cleanString },
-                        set: { viewModel.input.growthRate = Double($0) ?? 0 }
-                    ),
-                    suffix: "%",
-                    errorMessage: errorMessage(for: "growthRate")
-                )
-                .onChange(of: viewModel.input.growthRate) { clearErrors() }
-                InputStepperRow(
-                    title: "Forecast Years",
-                    value: $viewModel.input.forecastYears,
-                    range: 1...30
-                )
+
+                // Dynamic Growth Rate inputs based on model type
+                let labels = viewModel.input.modelType.stageLabels(forecastYears: viewModel.input.forecastYears)
+                ForEach(Array(labels.enumerated()), id: \.offset) { index, label in
+                    InputFieldRow(
+                        title: label,
+                        placeholder: "e.g. 8",
+                        text: stageGrowthBinding(at: index),
+                        suffix: "%",
+                        errorMessage: (index == 0) ? growthRateError : nil
+                    )
+                    .onChange(of: viewModel.input.stageGrowthRates[index]) { clearErrors() }
+                }
             }
 
             Section("Discount Rate") {

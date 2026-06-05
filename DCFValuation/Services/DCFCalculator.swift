@@ -10,16 +10,19 @@ struct DCFCalculator: Sendable {
         }
 
         let waccDecimal = input.wacc / 100
-        let growthDecimal = input.growthRate / 100
         let terminalGrowthDecimal = input.terminalGrowthRate / 100
 
-        // Step 1: Calculate projected FCFs and their present values
+        // Step 1: Project FCFs based on model type
         var yearlyFCFs: [YearlyFCF] = []
         var currentFCF = input.fcf
         var pvSum = 0.0
 
         for year in 1...input.forecastYears {
-            currentFCF = currentFCF * (1 + growthDecimal)
+            // Determine the growth rate for this year based on model type
+            let rateIndex = input.modelType.growthRateIndex(forYear: year, forecastYears: input.forecastYears)
+            let yearGrowthDecimal = input.stageGrowthRates[rateIndex] / 100
+
+            currentFCF = currentFCF * (1 + yearGrowthDecimal)
             let discountFactor = 1.0 / pow(1 + waccDecimal, Double(year))
             let pv = currentFCF * discountFactor
             pvSum += pv
@@ -28,11 +31,12 @@ struct DCFCalculator: Sendable {
                 year: year,
                 fcf: currentFCF,
                 discountFactor: discountFactor,
-                pv: pv
+                pv: pv,
+                growthRate: input.stageGrowthRates[rateIndex]
             ))
         }
 
-        // Step 2: Terminal value
+        // Step 2: Terminal value (same formula for all models)
         let lastFCF = currentFCF
         let terminalValue = lastFCF * (1 + terminalGrowthDecimal) / (waccDecimal - terminalGrowthDecimal)
         let pvOfTerminalValue = terminalValue / pow(1 + waccDecimal, Double(input.forecastYears))
@@ -52,8 +56,9 @@ struct DCFCalculator: Sendable {
         if terminalValuePct > 0.8 {
             warnings.append(.highTerminalValuePct(terminalValuePct))
         }
-        if input.growthRate > 30 {
-            warnings.append(.highGrowthRate(input.growthRate))
+        let maxGrowth = input.stageGrowthRates.max() ?? 0
+        if maxGrowth > 30 {
+            warnings.append(.highGrowthRate(maxGrowth))
         }
 
         let result = DCFResult(
