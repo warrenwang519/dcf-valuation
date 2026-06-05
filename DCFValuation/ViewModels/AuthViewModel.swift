@@ -20,12 +20,23 @@ final class AuthViewModel {
 
     @MainActor
     func checkAuthState() async {
-        let isAuthenticated = await authService.checkAppleIDCredentialState()
-        if isAuthenticated, let account = authService.getCachedAccount() {
-            authState = .loggedIn(account)
-        } else {
-            authState = .notLoggedIn
-        }
+        // TODO: Re-enable real auth once Apple Developer Program is active
+        // Dev mode: auto-login with a local dev account
+        let devAccount = UserAccount(
+            userIdentifier: "dev-local-user",
+            email: "dev@local",
+            fullName: "Dev User",
+            createdAt: .now
+        )
+        authState = .loggedIn(devAccount)
+
+        // --- Original auth flow (restore when paid) ---
+        // let isAuthenticated = await authService.checkAppleIDCredentialState()
+        // if isAuthenticated, let account = authService.getCachedAccount() {
+        //     authState = .loggedIn(account)
+        // } else {
+        //     authState = .notLoggedIn
+        // }
     }
 
     func handleAppleSignIn(result: Result<ASAuthorization, Error>) {
