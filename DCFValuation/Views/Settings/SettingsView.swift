@@ -8,30 +8,31 @@ struct SettingsView: View {
     @State private var showClearConfirm = false
 
     var body: some View {
+        @Bindable var settings = settingsService
         NavigationStack {
             Form {
                 AccountSectionView()
 
                 Section("Defaults") {
-                    CurrencyPickerView(currency: $settingsService.settings.defaultCurrency)
+                    CurrencyPickerView(currency: $settings.settings.defaultCurrency)
 
                     Stepper(
-                        "\(settingsService.settings.defaultForecastYears) \("years")",
-                        value: $settingsService.settings.defaultForecastYears,
+                        "\(settings.settings.defaultForecastYears) years",
+                        value: $settings.settings.defaultForecastYears,
                         in: 1...30
                     )
 
                     HStack {
                         Text("Default WACC")
                         Spacer()
-                        Text("\(settingsService.settings.defaultWACC, specifier: "%.1f")%")
+                        Text("\(settings.settings.defaultWACC, specifier: "%.1f")%")
                             .foregroundStyle(.secondary)
                     }
 
                     HStack {
                         Text("Default Terminal Growth")
                         Spacer()
-                        Text("\(settingsService.settings.defaultTerminalGrowthRate, specifier: "%.1f")%")
+                        Text("\(settings.settings.defaultTerminalGrowthRate, specifier: "%.1f")%")
                             .foregroundStyle(.secondary)
                     }
                 }
