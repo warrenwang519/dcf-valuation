@@ -17,8 +17,6 @@ struct DCFInputView: View {
     @State private var viewModel = DCFInputViewModel()
     @State private var navigateToResult = false
     @State private var showErrors = false
-    /// Raw string inputs for each stage, preserving user typing (e.g. "8." not losing the dot).
-    @State private var rawStageInputs: [String] = []
 
     /// Map a validation error to its field identifier.
     private func fieldID(for error: ValidationError) -> String {
@@ -54,25 +52,16 @@ struct DCFInputView: View {
         if showErrors { showErrors = false }
     }
 
-    /// Sync rawStageInputs count with stageGrowthRates.
-    private func syncRawInputs() {
-        let count = viewModel.input.stageGrowthRates.count
-        if rawStageInputs.count != count {
-            rawStageInputs = viewModel.input.stageGrowthRates.map { $0 == 0 ? "" : $0.cleanString }
-        }
-    }
-
     /// Binding for a specific stage growth rate (safe indexing, preserves raw input).
     private func stageGrowthBinding(at index: Int) -> Binding<String> {
         Binding(
             get: {
-                guard index < rawStageInputs.count else { return "" }
-                return rawStageInputs[index]
+                guard index < viewModel.stageInputTexts.count else { return "" }
+                return viewModel.stageInputTexts[index]
             },
             set: { newValue in
-                guard index < rawStageInputs.count else { return }
-                rawStageInputs[index] = newValue
-                // Parse to Double for calculation, preserving raw string for display
+                guard index < viewModel.stageInputTexts.count else { return }
+                viewModel.stageInputTexts[index] = newValue
                 if index < viewModel.input.stageGrowthRates.count {
                     viewModel.input.stageGrowthRates[index] = Double(newValue) ?? 0
                 }
@@ -81,7 +70,6 @@ struct DCFInputView: View {
     }
 
     var body: some View {
-        let _ = syncRawInputs()
         Form {
             Section("Ticker") {
                 InputFieldRow(

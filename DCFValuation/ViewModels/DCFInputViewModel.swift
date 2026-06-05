@@ -7,6 +7,8 @@ final class DCFInputViewModel {
     var input = DCFInput()
     var validationErrors: [ValidationError] = []
     var result: DCFResult?
+    /// Raw user input text for each stage growth rate field (preserves "8." etc.).
+    var stageInputTexts: [String] = []
 
     private let calculator = DCFCalculator()
     private let validationService = ValidationService()
@@ -41,15 +43,16 @@ final class DCFInputViewModel {
         input.wacc = settings.defaultWACC
         input.terminalGrowthRate = settings.defaultTerminalGrowthRate
         input.resetGrowthRates()
+        syncStageInputTexts()
     }
 
     func loadFromRecord(_ dcfInput: DCFInput) {
         input = dcfInput
-        // Ensure stageGrowthRates has the correct size for the model type
         let expectedCount = input.modelType.resolvedStageCount(forecastYears: input.forecastYears)
         if input.stageGrowthRates.count != expectedCount {
             input.resetGrowthRates()
         }
+        syncStageInputTexts()
     }
 
     /// Call when forecast years changes — reset model type if incompatible.
@@ -59,10 +62,18 @@ final class DCFInputViewModel {
             input.modelType = .constantGrowth
         }
         input.resetGrowthRates()
+        syncStageInputTexts()
     }
 
     /// Call when model type changes — reset growth rates.
     func onModelTypeChanged() {
         input.resetGrowthRates()
+        syncStageInputTexts()
     }
+
+    /// Sync stageInputTexts from stageGrowthRates (called on model/type change only).
+    func syncStageInputTexts() {
+        stageInputTexts = input.stageGrowthRates.map { $0 == 0 ? "" : $0.cleanString }
+    }
+}
 }
