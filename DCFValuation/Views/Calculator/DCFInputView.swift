@@ -56,6 +56,7 @@ struct DCFInputView: View {
     private func stageGrowthBinding(at index: Int) -> Binding<String> {
         Binding(
             get: {
+                viewModel.ensureStageTextsSynced()
                 guard index < viewModel.stageInputTexts.count else { return "" }
                 return viewModel.stageInputTexts[index]
             },

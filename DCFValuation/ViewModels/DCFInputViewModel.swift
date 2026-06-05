@@ -8,7 +8,8 @@ final class DCFInputViewModel {
     var validationErrors: [ValidationError] = []
     var result: DCFResult?
     /// Raw user input text for each stage growth rate field (preserves "8." etc.).
-    var stageInputTexts: [String] = []
+    var stageInputTexts: [String] = [""]
+    private var stageTextsInitialized = false
 
     private let calculator = DCFCalculator()
     private let validationService = ValidationService()
@@ -43,7 +44,7 @@ final class DCFInputViewModel {
         input.wacc = settings.defaultWACC
         input.terminalGrowthRate = settings.defaultTerminalGrowthRate
         input.resetGrowthRates()
-        syncStageInputTexts()
+        stageTextsInitialized = false // force re-sync on next access
     }
 
     func loadFromRecord(_ dcfInput: DCFInput) {
@@ -52,7 +53,7 @@ final class DCFInputViewModel {
         if input.stageGrowthRates.count != expectedCount {
             input.resetGrowthRates()
         }
-        syncStageInputTexts()
+        stageTextsInitialized = false
     }
 
     /// Call when forecast years changes — reset model type if incompatible.
@@ -62,18 +63,29 @@ final class DCFInputViewModel {
             input.modelType = .constantGrowth
         }
         input.resetGrowthRates()
-        syncStageInputTexts()
+        stageTextsInitialized = false
     }
 
     /// Call when model type changes — reset growth rates.
     func onModelTypeChanged() {
         input.resetGrowthRates()
+        stageTextsInitialized = false
+    }
+
+    /// Ensure stageInputTexts matches stageGrowthRates (call from binding getter, not from view body).
+    func ensureStageTextsSynced() {
+        guard !stageTextsInitialized || stageInputTexts.count != input.stageGrowthRates.count else { return }
         syncStageInputTexts()
+        stageTextsInitialized = true
     }
 
     /// Sync stageInputTexts from stageGrowthRates (called on model/type change only).
     func syncStageInputTexts() {
-        stageInputTexts = input.stageGrowthRates.map { $0 == 0 ? "" : $0.cleanString }
+        stageInputTexts = input.stageGrowthRates.map {
+            if $0 == 0 { return "" }
+            return $0.truncatingRemainder(dividingBy: 1) == 0
+                ? String(format: "%.0f", $0)
+                : String($0)
+        }
     }
-}
 }
