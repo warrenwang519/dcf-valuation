@@ -21,6 +21,44 @@ final class ValuationRecordV1 {
     var createdAt: Date
     var updatedAt: Date
     var note: String
+
+    nonisolated init(
+        id: UUID = UUID(),
+        ownerID: String = "",
+        ticker: String = "",
+        companyName: String = "",
+        intrinsicValue: Double = 0,
+        enterpriseValue: Double = 0,
+        currency: String = "USD",
+        fcf: Double = 0,
+        growthRate: Double = 0,
+        forecastYears: Int = 10,
+        wacc: Double = 0,
+        terminalGrowthRate: Double = 0,
+        netDebt: Double = 0,
+        sharesOutstanding: Double = 0,
+        createdAt: Date = Date(),
+        updatedAt: Date = Date(),
+        note: String = ""
+    ) {
+        self.id = id
+        self.ownerID = ownerID
+        self.ticker = ticker
+        self.companyName = companyName
+        self.intrinsicValue = intrinsicValue
+        self.enterpriseValue = enterpriseValue
+        self.currency = currency
+        self.fcf = fcf
+        self.growthRate = growthRate
+        self.forecastYears = forecastYears
+        self.wacc = wacc
+        self.terminalGrowthRate = terminalGrowthRate
+        self.netDebt = netDebt
+        self.sharesOutstanding = sharesOutstanding
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.note = note
+    }
 }
 
 @Model
