@@ -19,14 +19,16 @@ struct InputFieldRow: View {
                 .textFieldStyle(.roundedBorder)
                 .onChange(of: text) {
                     if numericOnly {
-                        let filtered = text.filter { $0.isNumber || $0 == "." }
-                        if filtered != text {
-                            text = filtered
+                        var seenDot = false
+                        let cleaned = text.filter { char in
+                            if char == "." {
+                                if seenDot { return false }
+                                seenDot = true
+                            }
+                            return char.isNumber || char == "."
                         }
-                        // Allow only one decimal point
-                        let parts = text.split(separator: ".", maxSplits: 2)
-                        if parts.count > 2 {
-                            text = parts[0] + "." + parts[1]
+                        if cleaned != text {
+                            text = cleaned
                         }
                     }
                 }
