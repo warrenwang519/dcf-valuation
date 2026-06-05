@@ -45,6 +45,11 @@ final class DCFInputViewModel {
 
     func loadFromRecord(_ dcfInput: DCFInput) {
         input = dcfInput
+        // Ensure stageGrowthRates has the correct size for the model type
+        let expectedCount = input.modelType.resolvedStageCount(forecastYears: input.forecastYears)
+        if input.stageGrowthRates.count != expectedCount {
+            input.resetGrowthRates()
+        }
     }
 
     /// Call when forecast years changes — reset model type if incompatible.

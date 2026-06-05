@@ -52,14 +52,18 @@ struct DCFInputView: View {
         if showErrors { showErrors = false }
     }
 
-    /// Binding for a specific stage growth rate.
+    /// Binding for a specific stage growth rate (safe indexing).
     private func stageGrowthBinding(at index: Int) -> Binding<String> {
         Binding(
             get: {
+                guard index < viewModel.input.stageGrowthRates.count else { return "" }
                 let val = viewModel.input.stageGrowthRates[index]
                 return val == 0 ? "" : val.cleanString
             },
-            set: { viewModel.input.stageGrowthRates[index] = Double($0) ?? 0 }
+            set: { newValue in
+                guard index < viewModel.input.stageGrowthRates.count else { return }
+                viewModel.input.stageGrowthRates[index] = Double(newValue) ?? 0
+            }
         )
     }
 
