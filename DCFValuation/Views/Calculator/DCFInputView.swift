@@ -116,7 +116,7 @@ struct DCFInputView: View {
                 // FCF
                 InputFieldRow(
                     title: "FCF",
-                    placeholder: "Free Cash Flow (M)",
+                    placeholder: "FCF (million)",
                     text: Binding(
                         get: { viewModel.input.fcf == 0 ? "" : viewModel.input.fcf.cleanString },
                         set: { viewModel.input.fcf = Double($0) ?? 0 }
@@ -175,7 +175,7 @@ struct DCFInputView: View {
             Section("Equity") {
                 InputFieldRow(
                     title: "Net Debt",
-                    placeholder: "Net Debt (M)",
+                    placeholder: "Net Debt (million)",
                     text: Binding(
                         get: { viewModel.input.netDebt == 0 ? "" : viewModel.input.netDebt.cleanString },
                         set: { viewModel.input.netDebt = Double($0) ?? 0 }
