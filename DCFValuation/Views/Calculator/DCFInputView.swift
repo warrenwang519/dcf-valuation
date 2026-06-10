@@ -18,6 +18,7 @@ struct DCFInputView: View {
     @State private var navigateToResult = false
     @State private var showErrors = false
     @FocusState private var isInputFocused: Bool
+    @Binding var selectedTab: String
 
     /// Map a validation error to its field identifier.
     private func fieldID(for error: ValidationError) -> String {
@@ -230,7 +231,8 @@ struct DCFInputView: View {
                         result: result,
                         persistenceService: PersistenceService(modelContext: modelContext),
                         ownerID: ownerID
-                    )
+                    ),
+                    selectedTab: $selectedTab
                 )
             }
         }
@@ -241,7 +243,7 @@ struct DCFInputView: View {
 }
 
 #Preview {
-    DCFInputView()
+    DCFInputView(selectedTab: .constant("calculator"))
         .environment(AuthViewModel())
         .environment(SettingsService())
 }

@@ -21,25 +21,31 @@ struct ContentView: View {
 }
 
 struct MainTabView: View {
+    @State private var selectedTab = "calculator"
+
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "house.fill") {
                 HomeView()
             }
+            .tag("home")
 
             Tab("Calculator", systemImage: "function") {
                 NavigationStack {
-                    DCFInputView()
+                    DCFInputView(selectedTab: $selectedTab)
                 }
             }
+            .tag("calculator")
 
             Tab("History", systemImage: "clock.fill") {
                 HistoryView()
             }
+            .tag("history")
 
             Tab("Settings", systemImage: "gearshape.fill") {
                 SettingsView()
             }
+            .tag("settings")
         }
     }
 }

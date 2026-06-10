@@ -3,6 +3,7 @@ import SwiftUI
 struct ResultView: View {
     @Bindable var viewModel: ResultViewModel
     @Environment(\.dismiss) private var dismiss
+    @Binding var selectedTab: String
 
     var body: some View {
         ScrollView {
@@ -77,6 +78,7 @@ struct ResultView: View {
                     HStack(spacing: 16) {
                         Button {
                             viewModel.save()
+                            selectedTab = "history"
                         } label: {
                             Label("Save", systemImage: "square.and.arrow.down")
                                 .frame(maxWidth: .infinity)
