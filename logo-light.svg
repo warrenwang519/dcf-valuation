@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- DCF Valuation App Logo — Light Mode -->
+  <!-- Flat, minimal, modern design. No gradients. -->
+
+  <!-- Pillar (abstract wall) — positioned left, does NOT overlap river -->
+  <rect x="40" y="55" width="22" height="210" rx="3" fill="#2C3E50"/>
+  <!-- Pillar cap -->
+  <rect x="35" y="48" width="32" height="10" rx="2" fill="#34495E"/>
+
+  <!-- River — wide S-curve, single flat color -->
+  <path d="M-10,120 C50,120 90,220 150,220 C220,220 260,70 310,70
+           L310,108 C260,108 220,258 150,258 C90,258 50,158 -10,158 Z"
+        fill="#0A84FF"/>
+</svg>
