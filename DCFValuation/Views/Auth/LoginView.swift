@@ -1,6 +1,26 @@
 import SwiftUI
 import AuthenticationServices
 
+// MARK: - Logo Shape (S-curve river from logo-light.svg)
+struct NvestLogoShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let sx = rect.width / 300
+        let sy = rect.height / 300
+        var p = Path()
+        p.move(to: CGPoint(x: 30 * sx, y: 240 * sy))
+        p.addCurve(to: CGPoint(x: 120 * sx, y: 140 * sy),
+                   control1: CGPoint(x: 70 * sx, y: 240 * sy),
+                   control2: CGPoint(x: 90 * sx, y: 140 * sy))
+        p.addCurve(to: CGPoint(x: 190 * sx, y: 200 * sy),
+                   control1: CGPoint(x: 150 * sx, y: 140 * sy),
+                   control2: CGPoint(x: 160 * sx, y: 200 * sy))
+        p.addCurve(to: CGPoint(x: 270 * sx, y: 60 * sy),
+                   control1: CGPoint(x: 230 * sx, y: 200 * sy),
+                   control2: CGPoint(x: 240 * sx, y: 100 * sy))
+        return p
+    }
+}
+
 struct LoginView: View {
     @Environment(AuthViewModel.self) private var authViewModel
 
@@ -9,11 +29,11 @@ struct LoginView: View {
             Spacer()
 
             VStack(spacing: 16) {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 64))
-                    .foregroundStyle(.blue)
+                NvestLogoShape()
+                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 12, lineCap: .round, lineJoin: .round))
+                    .frame(width: 200, height: 200)
 
-                Text("DCF Valuation")
+                Text("Nvest")
                     .font(.largeTitle.bold())
 
                 Text("Professional DCF valuation tool for investors.\nCalculate intrinsic value in seconds.")
