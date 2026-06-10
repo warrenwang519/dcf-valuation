@@ -213,6 +213,7 @@ struct DCFInputView: View {
                 .foregroundStyle(.white)
             }
         }
+        .scrollDismissesKeyboard(.interactively)
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {
