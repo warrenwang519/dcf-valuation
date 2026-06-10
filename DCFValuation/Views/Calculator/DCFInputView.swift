@@ -102,7 +102,6 @@ struct DCFInputView: View {
                     Text("5 years").tag(5)
                     Text("10 years").tag(10)
                 }
-                .highPriorityGesture(TapGesture())
 
                 // DCF Model Type
                 Picker("DCF Model", selection: Binding(
@@ -113,7 +112,6 @@ struct DCFInputView: View {
                         Text(model.rawValue).tag(model)
                     }
                 }
-                .highPriorityGesture(TapGesture())
 
                 // FCF
                 InputFieldRow(
@@ -204,7 +202,6 @@ struct DCFInputView: View {
                             .tag(currency)
                     }
                 }
-                .highPriorityGesture(TapGesture())
             }
 
             Section {
@@ -224,10 +221,6 @@ struct DCFInputView: View {
                 .listRowBackground(Color.blue)
                 .foregroundStyle(.white)
             }
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isInputFocused = false
         }
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {

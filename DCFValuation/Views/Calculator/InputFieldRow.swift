@@ -51,6 +51,10 @@ struct InputFieldRow: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFocused.wrappedValue = false
+        }
     }
 }
 
