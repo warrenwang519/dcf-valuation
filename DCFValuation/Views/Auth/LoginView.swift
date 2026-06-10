@@ -23,6 +23,7 @@ struct NvestLogoShape: Shape {
 
 struct LoginView: View {
     @Environment(AuthViewModel.self) private var authViewModel
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: 40) {
@@ -51,7 +52,7 @@ struct LoginView: View {
                 } onCompletion: { result in
                     authViewModel.handleAppleSignIn(result: result)
                 }
-                .signInWithAppleButtonStyle(.black)
+                .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
                 .frame(height: 50)
                 .frame(maxWidth: 300)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
