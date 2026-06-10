@@ -8,6 +8,7 @@ struct InputFieldRow: View {
     var numericOnly: Bool = true
     var suffix: String?
     var errorMessage: String?
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -19,17 +20,7 @@ struct InputFieldRow: View {
                     .keyboardType(keyboardType)
                     .multilineTextAlignment(.trailing)
                     .textFieldStyle(.roundedBorder)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Done") {
-                                UIApplication.shared.sendAction(
-                                    #selector(UIResponder.resignFirstResponder),
-                                    to: nil, from: nil, for: nil
-                                )
-                            }
-                        }
-                    }
+                    .focused($isFocused)
                     .onChange(of: text) {
                         if numericOnly {
                             var seenDot = false
@@ -59,6 +50,10 @@ struct InputFieldRow: View {
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isFocused = false
         }
     }
 }
