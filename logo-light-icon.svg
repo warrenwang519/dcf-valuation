@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 370" width="512" height="512" overflow="hidden">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="450" height="450" overflow="hidden">
 
-    <path d="M65 275
-           C105 275, 125 175, 155 175
-           C185 175, 195 235, 225 235
-           C265 235, 275 135, 305 95" fill="none" stroke="#0A84FF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M130 340
+           C170 340, 190 240, 220 240
+           C250 240, 260 300, 290 300
+           C330 300, 340 200, 370 160" fill="none" stroke="#0A84FF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
