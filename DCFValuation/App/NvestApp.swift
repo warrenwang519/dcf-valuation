@@ -25,7 +25,7 @@ enum ValuationSchemaV2: VersionedSchema {
 }
 
 @main
-struct DCFValuationApp: App {
+struct NvestApp: App {
     @State private var authViewModel = AuthViewModel()
     @State private var settingsService = SettingsService()
 

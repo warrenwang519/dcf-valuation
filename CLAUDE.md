@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DCF Valuation App — a professional DCF (Discounted Cash Flow) valuation tool for iOS. Targets individual investors in US, HK, and A-share markets. Users input financial parameters and get intrinsic value per share in seconds.
+Nvest — a professional DCF (Discounted Cash Flow) valuation tool for iOS. Targets individual investors in US, HK, and A-share markets. Users input financial parameters and get intrinsic value per share in seconds.
 
 ## Git Workflow
 
