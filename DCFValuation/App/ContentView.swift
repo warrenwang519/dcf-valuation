@@ -25,27 +25,23 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Home", systemImage: "house.fill") {
+            Tab("Home", systemImage: "house.fill", value: "home") {
                 HomeView()
             }
-            .tag("home")
 
-            Tab("Calculator", systemImage: "function") {
+            Tab("Calculator", systemImage: "function", value: "calculator") {
                 NavigationStack {
                     DCFInputView(selectedTab: $selectedTab)
                 }
             }
-            .tag("calculator")
 
-            Tab("History", systemImage: "clock.fill") {
+            Tab("History", systemImage: "clock.fill", value: "history") {
                 HistoryView()
             }
-            .tag("history")
 
-            Tab("Settings", systemImage: "gearshape.fill") {
+            Tab("Settings", systemImage: "gearshape.fill", value: "settings") {
                 SettingsView()
             }
-            .tag("settings")
         }
     }
 }
