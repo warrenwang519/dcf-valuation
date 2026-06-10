@@ -3,5 +3,5 @@
     <path d="M30 240
            C70 240, 90 140, 120 140
            C150 140, 160 200, 190 200
-           C230 200, 240 100, 270 60" fill="none" stroke="#0A84FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"></path>
+           C230 200, 240 100, 270 60" fill="none" stroke="#0A84FF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
