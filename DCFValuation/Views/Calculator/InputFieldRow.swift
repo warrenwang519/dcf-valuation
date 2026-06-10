@@ -19,6 +19,17 @@ struct InputFieldRow: View {
                     .keyboardType(keyboardType)
                     .multilineTextAlignment(.trailing)
                     .textFieldStyle(.roundedBorder)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                UIApplication.shared.sendAction(
+                                    #selector(UIResponder.resignFirstResponder),
+                                    to: nil, from: nil, for: nil
+                                )
+                            }
+                        }
+                    }
                     .onChange(of: text) {
                         if numericOnly {
                             var seenDot = false
@@ -47,17 +58,6 @@ struct InputFieldRow: View {
                     .font(.caption)
                     .foregroundStyle(.red)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil, from: nil, for: nil
-                    )
-                }
             }
         }
     }
