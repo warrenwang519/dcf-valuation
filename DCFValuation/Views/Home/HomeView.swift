@@ -19,7 +19,7 @@ struct HomeView: View {
                 VStack(spacing: 24) {
                     // Quick start
                     NavigationLink {
-                        DCFInputView()
+                        DCFInputView(selectedTab: .constant("calculator"))
                     } label: {
                         HStack {
                             Image(systemName: "plus.circle.fill")
@@ -52,7 +52,8 @@ struct HomeView: View {
                                                 isReadOnly: true,
                                                 persistenceService: PersistenceService(modelContext: modelContext),
                                                 ownerID: record.ownerID
-                                            )
+                                            ),
+                                            selectedTab: .constant("history")
                                         )
                                     }
                                 } label: {
