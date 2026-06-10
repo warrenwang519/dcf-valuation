@@ -17,6 +17,7 @@ struct DCFInputView: View {
     @State private var viewModel = DCFInputViewModel()
     @State private var navigateToResult = false
     @State private var showErrors = false
+    @FocusState private var isInputFocused: Bool
 
     /// Map a validation error to its field identifier.
     private func fieldID(for error: ValidationError) -> String {
@@ -78,7 +79,8 @@ struct DCFInputView: View {
                     text: $viewModel.input.ticker,
                     keyboardType: .default,
                     numericOnly: false,
-                    errorMessage: errorMessage(for: "ticker")
+                    errorMessage: errorMessage(for: "ticker"),
+                    isFocused: $isInputFocused
                 )
                 .onChange(of: viewModel.input.ticker) { clearErrors() }
                 InputFieldRow(
@@ -86,7 +88,8 @@ struct DCFInputView: View {
                     placeholder: "Apple Inc.",
                     text: $viewModel.input.companyName,
                     keyboardType: .default,
-                    numericOnly: false
+                    numericOnly: false,
+                    isFocused: $isInputFocused
                 )
             }
 
@@ -118,7 +121,8 @@ struct DCFInputView: View {
                         get: { viewModel.input.fcf == 0 ? "" : viewModel.input.fcf.cleanString },
                         set: { viewModel.input.fcf = Double($0) ?? 0 }
                     ),
-                    errorMessage: errorMessage(for: "fcf")
+                    errorMessage: errorMessage(for: "fcf"),
+                    isFocused: $isInputFocused
                 )
                 .onChange(of: viewModel.input.fcf) { clearErrors() }
 
@@ -133,7 +137,8 @@ struct DCFInputView: View {
                             text: stageGrowthBinding(at: index),
                             numericOnly: false,
                             suffix: "%",
-                            errorMessage: (index == 0) ? growthRateError : nil
+                            errorMessage: (index == 0) ? growthRateError : nil,
+                            isFocused: $isInputFocused
                         )
                         .onChange(of: viewModel.input.stageGrowthRates) { clearErrors() }
                     }
@@ -149,7 +154,8 @@ struct DCFInputView: View {
                         set: { viewModel.input.wacc = Double($0) ?? 0 }
                     ),
                     suffix: "%",
-                    errorMessage: errorMessage(for: "wacc")
+                    errorMessage: errorMessage(for: "wacc"),
+                    isFocused: $isInputFocused
                 )
                 .onChange(of: viewModel.input.wacc) { clearErrors() }
                 InputFieldRow(
@@ -160,7 +166,8 @@ struct DCFInputView: View {
                         set: { viewModel.input.terminalGrowthRate = Double($0) ?? 0 }
                     ),
                     suffix: "%",
-                    errorMessage: errorMessage(for: "terminalGrowthRate")
+                    errorMessage: errorMessage(for: "terminalGrowthRate"),
+                    isFocused: $isInputFocused
                 )
                 .onChange(of: viewModel.input.terminalGrowthRate) { clearErrors() }
             }
@@ -172,7 +179,8 @@ struct DCFInputView: View {
                     text: Binding(
                         get: { viewModel.input.netDebt == 0 ? "" : viewModel.input.netDebt.cleanString },
                         set: { viewModel.input.netDebt = Double($0) ?? 0 }
-                    )
+                    ),
+                    isFocused: $isInputFocused
                 )
                 InputFieldRow(
                     title: "Shares",
@@ -181,7 +189,8 @@ struct DCFInputView: View {
                         get: { viewModel.input.sharesOutstanding == 0 ? "" : viewModel.input.sharesOutstanding.cleanString },
                         set: { viewModel.input.sharesOutstanding = Double($0) ?? 0 }
                     ),
-                    errorMessage: errorMessage(for: "shares")
+                    errorMessage: errorMessage(for: "shares"),
+                    isFocused: $isInputFocused
                 )
                 .onChange(of: viewModel.input.sharesOutstanding) { clearErrors() }
             }
@@ -213,7 +222,14 @@ struct DCFInputView: View {
                 .foregroundStyle(.white)
             }
         }
-        .scrollDismissesKeyboard(.interactively)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    isInputFocused = false
+                }
+            }
+        }
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {

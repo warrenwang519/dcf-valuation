@@ -8,6 +8,7 @@ struct InputFieldRow: View {
     var numericOnly: Bool = true
     var suffix: String?
     var errorMessage: String?
+    var isFocused: FocusState<Bool>.Binding
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -19,6 +20,7 @@ struct InputFieldRow: View {
                     .keyboardType(keyboardType)
                     .multilineTextAlignment(.trailing)
                     .textFieldStyle(.roundedBorder)
+                    .focused(isFocused)
                     .onChange(of: text) {
                         if numericOnly {
                             var seenDot = false
