@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 private extension Double {
     /// Display as integer if no fractional part, otherwise show decimals.
@@ -7,6 +8,45 @@ private extension Double {
         truncatingRemainder(dividingBy: 1) == 0
             ? String(format: "%.0f", self)
             : String(self)
+    }
+}
+
+/// Adds a tap gesture to the Form's underlying UIScrollView that dismisses
+/// the keyboard without blocking other controls (Pickers, Buttons, etc.)
+struct KeyboardDismissGesture: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: .zero)
+        DispatchQueue.main.async {
+            var current: UIView? = view
+            while let parent = current?.superview {
+                for subview in parent.subviews {
+                    if let scrollView = subview as? UIScrollView {
+                        let tap = UITapGestureRecognizer(
+                            target: context.coordinator,
+                            action: #selector(Coordinator.handleTap)
+                        )
+                        tap.cancelsTouchesInView = false
+                        scrollView.addGestureRecognizer(tap)
+                        return
+                    }
+                }
+                current = parent
+            }
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    class Coordinator: NSObject {
+        @objc func handleTap() {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil, from: nil, for: nil
+            )
+        }
     }
 }
 
@@ -222,6 +262,7 @@ struct DCFInputView: View {
                 .foregroundStyle(.white)
             }
         }
+        .background(KeyboardDismissGesture())
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {
