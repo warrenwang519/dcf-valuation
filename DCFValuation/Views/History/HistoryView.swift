@@ -35,7 +35,8 @@ struct HistoryView: View {
                                             isReadOnly: true,
                                             persistenceService: PersistenceService(modelContext: modelContext),
                                             ownerID: record.ownerID
-                                        )
+                                        ),
+                                        selectedTab: .constant("history")
                                     )
                                 }
                             } label: {
