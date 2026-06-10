@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import UIKit
 
 private extension Double {
     /// Display as integer if no fractional part, otherwise show decimals.
@@ -223,10 +222,6 @@ struct DCFInputView: View {
                 .foregroundStyle(.white)
             }
         }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onEnded { _ in isInputFocused = false }
-        )
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {
