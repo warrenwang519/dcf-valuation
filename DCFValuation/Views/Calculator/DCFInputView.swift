@@ -223,9 +223,9 @@ struct DCFInputView: View {
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture {
-            isInputFocused = false
-        }
+        .simultaneousGesture(
+            TapGesture().onEnded { isInputFocused = false }
+        )
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
             if let result = viewModel.result, let ownerID = authViewModel.currentUser?.userIdentifier {
