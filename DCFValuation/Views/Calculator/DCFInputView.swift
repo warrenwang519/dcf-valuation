@@ -222,13 +222,9 @@ struct DCFInputView: View {
                 .foregroundStyle(.white)
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    isInputFocused = false
-                }
-            }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isInputFocused = false
         }
         .navigationTitle("DCF Calculator")
         .navigationDestination(isPresented: $navigateToResult) {
